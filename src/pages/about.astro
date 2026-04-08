@@ -7,11 +7,9 @@ import Base from '../layouts/Base.astro';
   ogTitle="The Research — ScreenSavor"
   ogDescription="How generative art restores attention, grounded in neuroscience."
 >
-  <div id="bg-canvas"></div>
-
-  <div class="about-page">
-    <div class="container">
-      <a href="/" class="back-link">&larr; Back to ScreenSavor</a>
+  <div class="about">
+    <div class="column">
+      <a href="/" class="back">&larr; Back to ScreenSavor</a>
 
       <h1>The Research</h1>
       <p class="subtitle">How generative art restores attention</p>
@@ -35,17 +33,19 @@ import Base from '../layouts/Base.astro';
         Touch-based interaction with evolving visual patterns engages sensorimotor feedback loops associated with emotional regulation. Research by McGlone, Sandoz, and others shows that gentle, rhythmic sensory engagement can modulate autonomic arousal — reducing heart rate, lowering cortisol, and shifting the nervous system toward a parasympathetic state. ScreenSavor's interactive layer is designed with this in mind.
       </p>
 
+      <div class="rule"></div>
+
       <h2>Flow and the Free Energy Principle</h2>
       <p>
         ScreenSavor's generative systems operate at the edge of predictability — structured enough to be graspable, complex enough to remain surprising. This balance maps onto Karl Friston's Free Energy Principle and Csikszentmihalyi's concept of flow: states where the mind is neither bored nor overwhelmed, and where the boundary between observer and environment softens. This is the felt quality we are designing for.
       </p>
 
-      <hr />
-
       <h2>Clinical Validation</h2>
       <p>
         We are currently in conversation with neuroscience researchers to launch a Randomized Controlled Trial testing ScreenSavor's effects on stress, attention, and mood. This study will compare generative art environments against standard digital feeds, contributing to the emerging field of experience-based digital medicine.
       </p>
+
+      <div class="rule"></div>
 
       <h2>Collaborate</h2>
       <p>
@@ -64,76 +64,66 @@ import Base from '../layouts/Base.astro';
       </div>
     </div>
   </div>
-
-  <script is:inline src="/main.js"></script>
 </Base>
 
 <style>
-  .about-page {
-    position: relative;
-    z-index: 1;
-    padding: 4rem 2rem 6rem;
+  .about {
+    padding: 6rem 2rem 8rem;
   }
 
-  .container {
-    max-width: 680px;
+  .column {
+    max-width: 620px;
     margin: 0 auto;
-    background: oklch(0.08 0.006 260 / 0.45);
-    backdrop-filter: blur(24px) saturate(1.2);
-    -webkit-backdrop-filter: blur(24px) saturate(1.2);
-    border: 1px solid oklch(0.93 0.01 80 / 0.08);
-    border-radius: 24px;
-    padding: 4rem 3rem;
-    box-shadow: 0 8px 32px rgba(6, 6, 20, 0.6);
   }
 
-  .back-link {
+  .back {
     display: inline-block;
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--text-tertiary);
+    color: var(--text-faint);
     text-decoration: none;
-    margin-bottom: 4rem;
-    transition: color 300ms cubic-bezier(0.16, 1, 0.3, 1),
-                transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    margin-bottom: 5rem;
+    transition: color 300ms var(--ease);
   }
 
-  .back-link:hover {
-    color: oklch(0.72 0.12 75);
-    transform: translateX(-4px);
+  .back:hover {
+    color: var(--accent);
   }
 
   h1 {
-    font-family: var(--font-serif);
-    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
     font-weight: 300;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
 
   .subtitle {
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     font-style: italic;
-    color: var(--text-secondary);
-    margin-bottom: 3.5rem;
+    color: var(--text-dim);
+    margin-bottom: 4rem;
   }
 
   h2 {
-    font-family: var(--font-serif);
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 400;
     margin-top: 3.5rem;
     margin-bottom: 1.25rem;
-    color: var(--text-primary);
+    color: var(--text);
   }
 
   p {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
+    font-size: 1.05rem;
+    color: var(--text-dim);
     margin-bottom: 1.25rem;
-    line-height: 1.75;
+    line-height: 1.85;
+  }
+
+  .rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--text-faint), transparent);
+    margin: 4rem 0;
   }
 
   ul {
@@ -143,72 +133,61 @@ import Base from '../layouts/Base.astro';
   }
 
   li {
-    padding-left: 1.2rem;
+    padding-left: 1.5rem;
     position: relative;
-    color: var(--text-secondary);
-    margin-bottom: 0.6rem;
-    font-size: 0.95rem;
+    color: var(--text-dim);
+    margin-bottom: 0.75rem;
+    font-size: 1.05rem;
   }
 
   li::before {
     content: '';
     position: absolute;
     left: 0;
-    top: 0.75em;
-    width: 4px;
-    height: 4px;
+    top: 0.7em;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
-    background: oklch(0.72 0.12 75);
-    box-shadow: 0 0 6px oklch(0.72 0.12 75 / 0.4);
+    background: var(--accent);
+    opacity: 0.5;
   }
 
   a {
-    color: oklch(0.72 0.12 75);
+    color: var(--accent);
     text-decoration: none;
-    background-image: linear-gradient(oklch(0.72 0.12 75), oklch(0.72 0.12 75));
-    background-size: 0% 1px;
-    background-position: 0 100%;
-    background-repeat: no-repeat;
-    transition: background-size 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 200ms var(--ease);
   }
 
   a:hover {
-    background-size: 100% 1px;
-  }
-
-  hr {
-    border: none;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, oklch(0.72 0.12 75 / 0.35), transparent);
-    margin: 3.5rem 0;
+    opacity: 0.7;
   }
 
   .contact {
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    color: var(--text-tertiary);
-    margin-top: 4rem;
+    font-size: 0.85rem;
+    color: var(--text-faint);
+    margin-top: 5rem;
   }
 
   .contact a {
-    color: var(--text-tertiary);
-    background-image: none;
+    color: var(--text-faint);
   }
 
   .contact a:hover {
-    color: var(--text-secondary);
+    color: var(--text-dim);
+    opacity: 1;
   }
 
   @media (max-width: 600px) {
-    .about-page {
-      padding: 2rem 1rem 4rem;
+    .about {
+      padding: 3rem 1.5rem 5rem;
     }
 
-    .container {
-      padding: 2.5rem 1.5rem;
-      border-radius: 16px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    .back {
+      margin-bottom: 3rem;
+    }
+
+    .subtitle {
+      margin-bottom: 3rem;
     }
   }
 </style>
