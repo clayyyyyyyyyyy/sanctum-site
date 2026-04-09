@@ -361,21 +361,25 @@ document.querySelectorAll('section[data-sketch]').forEach(section => {
   sectionObserver.observe(section);
 });
 
-// ── Animate-in with stagger ──
+// ── Animate-in / Animate-out with stagger ──
 
-// Stagger groups: when group enters viewport, reveal children sequentially
+// Stagger groups: reveal children when entering, hide when leaving
 const groupObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
+    const children = entry.target.querySelectorAll('.ani');
     if (entry.isIntersecting) {
-      const children = entry.target.querySelectorAll('.ani');
       children.forEach((child, i) => {
         child.style.transitionDelay = `${i * 120}ms`;
         child.classList.add('visible');
       });
-      groupObserver.unobserve(entry.target);
+    } else {
+      children.forEach((child, i) => {
+        child.style.transitionDelay = `${i * 60}ms`;
+        child.classList.remove('visible');
+      });
     }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.15 });
 
 document.querySelectorAll('.ani-group').forEach(el => groupObserver.observe(el));
 
@@ -384,7 +388,8 @@ const aniObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-      aniObserver.unobserve(entry.target);
+    } else {
+      entry.target.classList.remove('visible');
     }
   });
 }, { threshold: 0.15 });
@@ -394,6 +399,7 @@ document.querySelectorAll('.ani:not(.ani-group .ani)').forEach(el => aniObserver
 // ── Scroll-driven wordmark fade ──
 
 const wordmark = document.getElementById('wordmark');
+const scrollCue = document.querySelector('.scroll-cue');
 if (wordmark) {
   window.addEventListener('scroll', () => {
     const vh = window.innerHeight;
@@ -401,5 +407,8 @@ if (wordmark) {
     const progress = Math.min(scrollY / (vh * 0.6), 1);
     wordmark.style.opacity = 1 - progress;
     wordmark.style.transform = `translateY(${progress * -40}px)`;
+    if (scrollCue) {
+      scrollCue.classList.toggle('hidden', scrollY > vh * 0.15);
+    }
   }, { passive: true });
 }
