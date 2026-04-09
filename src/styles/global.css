@@ -52,62 +52,77 @@ body {
   z-index: 1;
 }
 
-/* ── Sections ── */
+/* ── Animate In ── */
+
+.ani {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(6px);
+  transition:
+    opacity 1s var(--ease),
+    transform 1s var(--ease),
+    filter 0.8s var(--ease);
+}
+
+.ani.visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* ── Sections — Split Layout ── */
 
 section {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 12vh 8vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 12vh 0;
   position: relative;
 }
 
+/* Left-biased vignette: dark left, transparent right */
 section::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse 80% 70% at 50% 50%,
-    rgba(5, 5, 8, 0.88) 0%,
-    rgba(5, 5, 8, 0.6) 45%,
-    rgba(5, 5, 8, 0.15) 75%,
-    transparent 100%
+  background: linear-gradient(
+    to right,
+    rgba(5, 5, 8, 0.94) 0%,
+    rgba(5, 5, 8, 0.88) 25%,
+    rgba(5, 5, 8, 0.5) 50%,
+    rgba(5, 5, 8, 0.15) 70%,
+    transparent 85%
   );
   pointer-events: none;
 }
 
 .section-text {
   position: relative;
-  max-width: 600px;
-}
-
-/* ── Fade ── */
-
-.fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 1.4s var(--ease), transform 1.4s var(--ease);
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
+  max-width: 520px;
+  padding-left: 8vw;
+  grid-column: 1;
 }
 
 /* ── Opening ── */
 
 .opening {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 0 8vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: center;
+  align-items: end;
+  padding: 0;
 }
 
 .opening::before {
   display: none;
+}
+
+.opening-text {
+  grid-column: 1;
+  padding-left: 8vw;
+  padding-bottom: 12vh;
 }
 
 .wordmark-line {
@@ -250,7 +265,6 @@ section p:last-child {
 .divider {
   height: 1px;
   background: linear-gradient(90deg, var(--text-ghost), transparent 80%);
-  margin-left: 5rem;
 }
 
 /* ── Signup ── */
@@ -348,9 +362,46 @@ footer a:hover {
 @media (max-width: 600px) {
   body { font-size: 17px; }
 
-  section { padding: 10vh 6vw; }
+  /* Vertical split: art top, content bottom */
+  section {
+    grid-template-columns: 1fr;
+    grid-template-rows: 35vh 1fr;
+    padding: 0;
+    align-items: start;
+  }
 
-  .opening { padding: 0 6vw; }
+  section::before {
+    /* Only darken the bottom content area */
+    background: linear-gradient(
+      to top,
+      rgba(5, 5, 8, 0.96) 0%,
+      rgba(5, 5, 8, 0.95) 55%,
+      rgba(5, 5, 8, 0.5) 70%,
+      transparent 85%
+    );
+  }
+
+  .section-text {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 2rem 6vw 6rem;
+    max-width: 100%;
+  }
+
+  /* Opening stays full-screen on mobile */
+  .opening {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    align-content: end;
+  }
+
+  .opening::before { display: none; }
+
+  .opening-text {
+    grid-column: 1;
+    padding-left: 6vw;
+    padding-bottom: 15vh;
+  }
 
   .wordmark-line:first-child,
   .wordmark-line:last-child {
@@ -371,13 +422,8 @@ footer a:hover {
     gap: 0;
   }
 
-  .product-num {
-    margin-bottom: 0.5rem;
-  }
-
+  .product-num { margin-bottom: 0.5rem; }
   .product h3 { font-size: 1.5rem; }
-
-  .divider { margin-left: 0; }
 
   .signup {
     flex-direction: column;
@@ -385,9 +431,7 @@ footer a:hover {
     align-items: stretch;
   }
 
-  .signup button {
-    align-self: flex-start;
-  }
+  .signup button { align-self: flex-start; }
 }
 
 /* ── Reduced Motion ── */
@@ -397,5 +441,10 @@ footer a:hover {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .ani {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 }

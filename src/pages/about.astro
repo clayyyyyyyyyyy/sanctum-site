@@ -12,12 +12,12 @@ import Base from '../layouts/Base.astro';
       <a href="/" class="back">&larr; Back</a>
     </nav>
 
-    <header class="about-header">
-      <h1>The Research</h1>
-      <p class="subtitle">How generative art restores attention</p>
+    <header class="about-header ani-group">
+      <h1 class="ani">The Research</h1>
+      <p class="subtitle ani">How generative art restores attention</p>
     </header>
 
-    <div class="about-body">
+    <div class="about-body ani-group">
       <p>
         ScreenSavor is informed by a growing body of research across neuroscience, psychology, and aesthetics. The generative systems are not decorative — they are designed to produce specific cognitive and emotional effects grounded in peer-reviewed science.
       </p>
@@ -68,6 +68,27 @@ import Base from '../layouts/Base.astro';
       </div>
     </div>
   </div>
+
+  <script is:inline>
+    // Animate-in for about page
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const children = entry.target.querySelectorAll('.ani');
+          if (children.length) {
+            children.forEach((c, i) => {
+              c.style.transitionDelay = `${i * 120}ms`;
+              c.classList.add('visible');
+            });
+          } else {
+            entry.target.classList.add('visible');
+          }
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.ani-group, .ani:not(.ani-group .ani)').forEach(el => obs.observe(el));
+  </script>
 </Base>
 
 <style>

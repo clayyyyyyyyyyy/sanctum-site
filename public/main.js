@@ -361,17 +361,35 @@ document.querySelectorAll('section[data-sketch]').forEach(section => {
   sectionObserver.observe(section);
 });
 
-// ── Scroll fade-in ──
+// ── Animate-in with stagger ──
 
-const fadeObserver = new IntersectionObserver((entries) => {
+// Stagger groups: when group enters viewport, reveal children sequentially
+const groupObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const children = entry.target.querySelectorAll('.ani');
+      children.forEach((child, i) => {
+        child.style.transitionDelay = `${i * 120}ms`;
+        child.classList.add('visible');
+      });
+      groupObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.ani-group').forEach(el => groupObserver.observe(el));
+
+// Standalone ani elements (not in a group, like opening wordmark)
+const aniObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
+      aniObserver.unobserve(entry.target);
     }
   });
 }, { threshold: 0.15 });
 
-document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+document.querySelectorAll('.ani:not(.ani-group .ani)').forEach(el => aniObserver.observe(el));
 
 // ── Scroll-driven wordmark fade ──
 
