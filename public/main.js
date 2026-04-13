@@ -310,7 +310,8 @@ function draw() {
   endShape(CLOSE);
 }
 
-function mousePressed() {
+function mousePressed(e) {
+  if (e && e.target && e.target.closest('#logo')) return;
   isNight = !isNight;
 }
 
@@ -335,9 +336,10 @@ function touchMoved() {
   return false;
 }
 
-function touchEnded() {
+function touchEnded(e) {
   const dt = millis() - touchStartTime;
   if (!didTouchMove && dt < TAP_TIME_THRESHOLD) {
+    if (e && e.target && e.target.closest('#logo')) return false;
     isNight = !isNight;
   }
   return false;

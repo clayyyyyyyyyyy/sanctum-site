@@ -30,27 +30,26 @@ import Base from '../layouts/Base.astro';
 
   <script is:inline>
     document.addEventListener('DOMContentLoaded', function() {
-      const logo = document.getElementById('logo');
-      const overlay = document.querySelector('.logo-overlay');
-      const circle = document.getElementById('circle');
-      const pageTwo = document.getElementById('page-two');
-      let zoomed = false;
+      var logo = document.getElementById('logo');
+      var overlay = document.querySelector('.logo-overlay');
+      var circle = document.getElementById('circle');
+      var pageTwo = document.getElementById('page-two');
+      var zoomed = false;
 
-      logo.addEventListener('click', function(e) {
-        e.stopPropagation();
+      function triggerZoom() {
         if (zoomed) return;
         zoomed = true;
 
-        const circleRect = circle.getBoundingClientRect();
-        const cx = circleRect.left + circleRect.width / 2;
-        const cy = circleRect.top + circleRect.height / 2;
-        const circleRadius = Math.max(circleRect.width, circleRect.height) / 2;
+        var circleRect = circle.getBoundingClientRect();
+        var cx = circleRect.left + circleRect.width / 2;
+        var cy = circleRect.top + circleRect.height / 2;
+        var circleRadius = Math.max(circleRect.width, circleRect.height) / 2;
 
-        const viewDiag = Math.sqrt(
+        var viewDiag = Math.sqrt(
           window.innerWidth * window.innerWidth +
           window.innerHeight * window.innerHeight
         );
-        const scale = (viewDiag / circleRadius) * 1.2;
+        var scale = (viewDiag / circleRadius) * 1.2;
 
         overlay.style.transformOrigin = cx + 'px ' + cy + 'px';
         overlay.style.transform = 'scale(' + scale + ')';
@@ -59,6 +58,18 @@ import Base from '../layouts/Base.astro';
           overlay.removeEventListener('transitionend', handler);
           pageTwo.classList.add('visible');
         });
+      }
+
+      logo.addEventListener('click', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        triggerZoom();
+      });
+
+      logo.addEventListener('touchend', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        triggerZoom();
       });
     });
   </script>
