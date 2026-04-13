@@ -31,8 +31,8 @@ main, canvas {
 }
 
 .logo-overlay svg {
-  width: min(22vw, 28vh);
-  height: auto;
+  height: calc(min(100vw, 100vh) * 2 / 3);
+  width: auto;
   opacity: 0;
   animation: fadeIn 1.2s ease-out 0.4s forwards;
 }
@@ -40,10 +40,4 @@ main, canvas {
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
-}
-
-@media (max-width: 600px) {
-  .logo-overlay svg {
-    width: 50vw;
-  }
 }
