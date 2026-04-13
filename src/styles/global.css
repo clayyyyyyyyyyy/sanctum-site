@@ -31,7 +31,7 @@ main, canvas {
 }
 
 .logo-overlay svg {
-  height: calc(min(100vw, 100vh) * 2 / 3);
+  height: calc(min(100vw, 100vh) / 2);
   width: auto;
   opacity: 0;
   animation: fadeIn 1.2s ease-out 0.4s forwards;
