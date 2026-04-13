@@ -13,10 +13,7 @@ function startHypertorus() {
     var isInteracting = false;
 
     p.setup = function() {
-      var container = document.getElementById('page-two');
-      var w = container.offsetWidth || p.windowWidth;
-      var h = container.offsetHeight || p.windowHeight;
-      var cnv = p.createCanvas(w, h, p.WEBGL);
+      var cnv = p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL);
       cnv.parent('page-two');
       p.colorMode(p.HSB, 360, 75, 75);
       p.noStroke();
@@ -50,22 +47,21 @@ function startHypertorus() {
       }
 
       var layers, pointsPerLayer, sphereSize, torusRadius, torusTube, maxRadius;
-      var shorter = p.min(p.width, p.height);
       if (p.width <= 800) {
         layers = 35;
         pointsPerLayer = 35;
         sphereSize = 3;
         torusRadius = 5;
         torusTube = 2;
-        maxRadius = shorter * 0.28;
+        maxRadius = 200;
       } else {
-        var scaleFactor = shorter / 800;
+        var scaleFactor = p.min(p.width, p.height) / 800;
         layers = p.floor(35 * scaleFactor);
         pointsPerLayer = p.floor(35 * scaleFactor);
         sphereSize = 3 * scaleFactor;
         torusRadius = 5 * scaleFactor;
         torusTube = 2 * scaleFactor;
-        maxRadius = shorter * 0.35;
+        maxRadius = p.min(p.width * 0.4, p.height * 0.35);
       }
 
       var globalHueShift = p.frameCount * 0.3 * touchYFactor;
