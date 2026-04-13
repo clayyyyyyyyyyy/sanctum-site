@@ -57,11 +57,10 @@ import Base from '../layouts/Base.astro';
         overlay.style.transformOrigin = cx + 'px ' + cy + 'px';
         overlay.style.transform = 'scale(' + scale + ')';
 
-        overlay.addEventListener('transitionend', function handler() {
-          overlay.removeEventListener('transitionend', handler);
+        setTimeout(function() {
           pageTwo.classList.add('visible');
           history.pushState(null, '', '/about');
-        });
+        }, 1400);
       }
 
       logo.addEventListener('click', function(e) {
