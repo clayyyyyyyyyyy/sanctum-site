@@ -27,6 +27,12 @@ html, body {
   background: #000;
 }
 
+/* Keep every layer (canvases + text) in a single compositing group so iOS
+   Safari can resolve mix-blend-mode: difference on the hero against them. */
+body {
+  isolation: isolate;
+}
+
 main {
   display: block;
   position: fixed;
@@ -133,10 +139,16 @@ main canvas {
 }
 
 /* Fade the individual children instead of the #page-two ancestor, so
-   mix-blend-mode on hero/body can reach through to the canvas once faded. */
+   mix-blend-mode on hero/body can reach through to the canvas once faded.
+   Use a one-shot transition (not animation-fill-mode: forwards) because iOS
+   retains a composited layer for forwards-filled animations, which cancels
+   mix-blend-mode: difference on the hero. */
 #page-two .about-content > * {
   opacity: 0;
-  animation: fadeIn 1.2s ease-out 0.3s forwards;
+  transition: opacity 1.2s ease-out 0.3s;
+}
+#page-two.is-loaded .about-content > * {
+  opacity: 1;
 }
 
 #page-two .about-content > * {

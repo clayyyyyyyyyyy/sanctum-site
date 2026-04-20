@@ -54,15 +54,13 @@ import Base from '../layouts/Base.astro';
       if ((window as any).startLumAdapter) (window as any).startLumAdapter();
       if ((window as any).startPillMirror) (window as any).startPillMirror();
 
-      // iOS Safari retains a composited layer (with implicit stacking context)
-      // for animation-fill-mode: forwards, which breaks mix-blend-mode: difference
-      // on .about-hero once the fade-in settles. Release the layer by dropping
-      // the animation and pinning opacity:1 inline once each child finishes.
-      document.querySelectorAll<HTMLElement>('#page-two .about-content > *').forEach(function (el) {
-        el.addEventListener('animationend', function () {
-          el.style.animation = 'none';
-          el.style.opacity = '1';
-        }, { once: true });
+      // Trigger the CSS opacity transition on .about-content children by toggling
+      // #page-two.is-loaded on the next frame. A transition avoids the iOS
+      // retained composited layer that a forwards-filled animation creates.
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          pageTwo.classList.add('is-loaded');
+        });
       });
 
       // Fade out before navigating away (back button or link)
