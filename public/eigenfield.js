@@ -8,7 +8,6 @@
     eigenfieldInstance = new p5(function (p) {
       var sh;
       var touchX = 0.5, touchY = 0.5, targetTouchAmt = 0.0, touchAmt = 0.0;
-      var didDrag = false;
 
       var phaseT = 0.0;
       var BASE_SPEED = 0.22;
@@ -352,6 +351,8 @@
         p.shader(sh);
 
         touchAmt += (targetTouchAmt - touchAmt) * 0.12;
+        // Decay the drive target so the effect fades when the pointer stops moving.
+        targetTouchAmt *= 0.94;
         morphX *= 0.96; morphY *= 0.96;
 
         var pd = p.pixelDensity();
@@ -402,32 +403,38 @@
         });
       }
 
+      // Hover-as-drag: moving the pointer drives the same ripples + morph that
+      // click-and-drag used to. Clicks/releases have no visual side effect.
       var lastMouseX = 0, lastMouseY = 0;
-      p.mouseMoved = function () { updateTouch(p.mouseX, p.mouseY, 0.30); lastMouseX = p.mouseX; lastMouseY = p.mouseY; };
-      p.mouseDragged = function () {
-        didDrag = true;
-        updateTouch(p.mouseX, p.mouseY, 0.85);
-        if (phaseT - lastTrailT > RIPPLE_SAMPLE_EVERY) { addRipple(p.mouseX, p.mouseY); lastTrailT = phaseT; }
-        var dx = (p.mouseX - lastMouseX) / p.width, dy = (p.mouseY - lastMouseY) / p.height;
+      var pointerInited = false;
+
+      function applyPointer(x, y) {
+        if (!pointerInited) {
+          lastMouseX = x; lastMouseY = y; pointerInited = true;
+          return;
+        }
+        updateTouch(x, y, 0.85);
+        if (phaseT - lastTrailT > RIPPLE_SAMPLE_EVERY) {
+          addRipple(x, y);
+          lastTrailT = phaseT;
+        }
+        var dx = (x - lastMouseX) / p.width;
+        var dy = (y - lastMouseY) / p.height;
         morphX = p.constrain(morphX + dx * 0.6, -1, 1);
         morphY = p.constrain(morphY - dy * 0.6, -1, 1);
-        lastMouseX = p.mouseX; lastMouseY = p.mouseY;
-      };
-      p.mousePressed = function () { didDrag = false; lastMouseX = p.mouseX; lastMouseY = p.mouseY; };
-      p.mouseReleased = function () { if (!didDrag) addRipple(p.mouseX, p.mouseY); targetTouchAmt = 0.0; };
-      p.touchStarted = function () { didDrag = false; };
+        lastMouseX = x; lastMouseY = y;
+      }
+
+      p.mouseMoved = function () { applyPointer(p.mouseX, p.mouseY); };
+      p.mouseDragged = function () { applyPointer(p.mouseX, p.mouseY); };
+      p.mousePressed = function () {};
+      p.mouseReleased = function () {};
+      p.touchStarted = function () {};
       p.touchMoved = function () {
-        if (p.touches.length) {
-          updateTouch(p.touches[0].x, p.touches[0].y, 0.85);
-          didDrag = true;
-          if (phaseT - lastTrailT > RIPPLE_SAMPLE_EVERY) { addRipple(p.touches[0].x, p.touches[0].y); lastTrailT = phaseT; }
-        }
+        if (p.touches.length) applyPointer(p.touches[0].x, p.touches[0].y);
         return false;
       };
-      p.touchEnded = function () {
-        if (!didDrag) addRipple(lastMouseX || p.width * 0.5, lastMouseY || p.height * 0.5);
-        targetTouchAmt = 0.0;
-      };
+      p.touchEnded = function () {};
       p.windowResized = function () {
         p.resizeCanvas(p.windowWidth, p.windowHeight);
         measureMask();
@@ -514,6 +521,8 @@
       nodes.forEach(function (el) {
         var r = el.getBoundingClientRect();
         if (r.width <= 1 || r.height <= 1) return;
+        // Skip empty text containers (e.g. the pre-submit waitlist-status).
+        if (el.tagName === 'P' && !el.textContent.trim()) return;
         var rr = Math.min(20, r.height * 0.5, r.width * 0.5);
         var x = r.left, y = r.top, w = r.width, h = r.height;
         parts.push(
