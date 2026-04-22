@@ -283,21 +283,9 @@ let didTouchMove = false;
 const TAP_MOVE_THRESHOLD = 16;
 const TAP_TIME_THRESHOLD = 280;
 
-// Use document client dimensions (which respect 100lvh on html) so the
-// canvas extends behind iOS Safari's URL bar and home indicator instead
-// of being clamped to the visual viewport.
-function fullViewport() {
-  var de = document.documentElement;
-  return {
-    w: Math.max(de.clientWidth, window.innerWidth || 0),
-    h: Math.max(de.clientHeight, window.innerHeight || 0)
-  };
-}
-
 function setup() {
   pixelDensity(2);
-  var vp = fullViewport();
-  createCanvas(vp.w, vp.h, WEBGL);
+  createCanvas(windowWidth, windowHeight, WEBGL);
   noStroke();
   cloudShader = createShader(vert, frag);
 }
@@ -361,6 +349,5 @@ function touchEnded(e) {
 }
 
 function windowResized() {
-  var vp = fullViewport();
-  resizeCanvas(vp.w, vp.h);
+  resizeCanvas(windowWidth, windowHeight);
 }
