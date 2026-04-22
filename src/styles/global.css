@@ -250,22 +250,42 @@ main canvas {
   border-color: rgba(251, 218, 84, 0.6);
 }
 
+@keyframes waitlist-autofill-dark {
+  to {
+    background: transparent;
+    color: #f2ede2;
+  }
+}
+@keyframes waitlist-autofill-light {
+  to {
+    background: transparent;
+    color: #1a1208;
+  }
+}
+
 .waitlist-form input:-webkit-autofill,
 .waitlist-form input:-webkit-autofill:hover,
 .waitlist-form input:-webkit-autofill:focus,
-.waitlist-form input:-webkit-autofill:active {
+.waitlist-form input:-webkit-autofill:active,
+.waitlist-form input:autofill {
   -webkit-text-fill-color: #f2ede2;
   -webkit-background-clip: text;
   background-clip: text;
   caret-color: #f2ede2;
   transition: background-color 600000s 0s, color 600000s 0s;
+  animation-name: waitlist-autofill-dark;
+  animation-fill-mode: both;
+  animation-duration: 1ms;
+  animation-delay: 0s;
 }
 
 .waitlist-form input[data-adapt][data-lum="light"]:-webkit-autofill,
 .waitlist-form input[data-adapt][data-lum="light"]:-webkit-autofill:hover,
-.waitlist-form input[data-adapt][data-lum="light"]:-webkit-autofill:focus {
+.waitlist-form input[data-adapt][data-lum="light"]:-webkit-autofill:focus,
+.waitlist-form input[data-adapt][data-lum="light"]:autofill {
   -webkit-text-fill-color: #1a1208;
   caret-color: #1a1208;
+  animation-name: waitlist-autofill-light;
 }
 
 .waitlist-form button {
