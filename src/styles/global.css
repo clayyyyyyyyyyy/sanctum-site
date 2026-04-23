@@ -180,7 +180,7 @@ main canvas {
   color: transparent;
   font-family: 'Alte Haas Grotesk', system-ui, sans-serif;
   font-weight: 700;
-  font-size: clamp(26px, 8vw - 0.5px, 54px);
+  font-size: clamp(24px, 7.5vw - 0.5px, 50px);
   line-height: 1.06;
   letter-spacing: -0.012em;
   text-align: center;
@@ -276,7 +276,10 @@ main canvas {
   -webkit-text-fill-color: #f2ede2;
   caret-color: #f2ede2;
   font: inherit;
-  font-size: 15px;
+  /* 16px is the minimum that keeps iOS Safari from auto-zooming the viewport
+     on focus — anything smaller triggers the zoom and leaves the page visually
+     lifted when the keyboard dismisses. */
+  font-size: 16px;
   text-align: center;
   padding: 11px 18px;
   -webkit-background-clip: text;
