@@ -179,6 +179,10 @@ main canvas {
   display: block;
 }
 
+.about-hero span + span {
+  margin-top: 1.06em;
+}
+
 .about-hero-canvas {
   position: absolute;
   top: 0;

@@ -663,6 +663,7 @@
 
       lines = [];
       for (var k = 0; k < rawLines.length; k++) {
+        if (k > 0) lines.push('');
         var wrapped = wrapText(rawLines[k], boxW);
         for (var j = 0; j < wrapped.length; j++) lines.push(wrapped[j]);
       }
