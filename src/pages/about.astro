@@ -31,8 +31,8 @@ import Base from '../layouts/Base.astro';
         </svg>
       </div>
       <h1 class="about-hero">
-        <span>screensavers were made to</span>
-        <span>protect our screens.</span>
+        <span>screensavers were made</span>
+        <span>to protect our screens.</span>
         <span data-sentence-start>today, our attention is</span>
         <span>what needs protection.</span>
         <canvas class="about-hero-canvas" aria-hidden="true"></canvas>
@@ -71,6 +71,20 @@ import Base from '../layouts/Base.astro';
       const submitBtn = document.querySelector('.waitlist-form button') as HTMLElement;
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+      // Size the phone field to the average of the email (full-width) and the
+      // submit button's intrinsic width. Runs on load, on resize, and once
+      // custom fonts settle (button is content-sized, so it shifts on font swap).
+      function syncPhoneWidth() {
+        const emailW = emailField.getBoundingClientRect().width;
+        const buttonW = submitBtn.getBoundingClientRect().width;
+        if (emailW && buttonW) {
+          phoneField.style.width = ((emailW + buttonW) / 2) + 'px';
+        }
+      }
+      syncPhoneWidth();
+      window.addEventListener('resize', syncPhoneWidth);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncPhoneWidth);
+
       // Resolves when el's opacity transition finishes. Uses a timeout fallback
       // so a missed transitionend (CSS override, reduced motion) still advances.
       function onOpacityEnd(el: HTMLElement, cb: () => void) {
@@ -83,7 +97,7 @@ import Base from '../layouts/Base.astro';
           cb();
         };
         el.addEventListener('transitionend', handler);
-        setTimeout(() => { if (done) return; done = true; el.removeEventListener('transitionend', handler); cb(); }, 1400);
+        setTimeout(() => { if (done) return; done = true; el.removeEventListener('transitionend', handler); cb(); }, 2200);
       }
 
       if (prefersReduced) {
