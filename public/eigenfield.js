@@ -630,7 +630,8 @@
     }
 
     function refreshLayout() {
-      var rawLines = Array.prototype.slice.call(hero.querySelectorAll('span')).map(function (s) {
+      var spanEls = Array.prototype.slice.call(hero.querySelectorAll('span'));
+      var rawLines = spanEls.map(function (s) {
         return s.textContent.trim();
       });
       var cs = getComputedStyle(hero);
@@ -665,7 +666,9 @@
 
       lines = [];
       for (var k = 0; k < rawLines.length; k++) {
-        if (k > 0) lines.push('');
+        if (spanEls[k] && spanEls[k].hasAttribute('data-sentence-start')) {
+          lines.push('');
+        }
         var wrapped = wrapText(rawLines[k], boxW);
         for (var j = 0; j < wrapped.length; j++) lines.push(wrapped[j]);
       }
