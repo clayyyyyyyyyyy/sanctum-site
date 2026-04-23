@@ -283,7 +283,6 @@ main canvas {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  margin-top: 4px;
   background: #fad953;
   border: 1px solid #000;
   border-radius: 999px;
