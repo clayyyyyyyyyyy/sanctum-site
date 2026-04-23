@@ -132,6 +132,21 @@ import Base from '../layouts/Base.astro';
         }, { once: true });
       }
 
+      // iOS Safari scrolls #page-two (overflow-y: auto) to push a focused input
+      // above the keyboard, then leaves that scroll offset when the keyboard
+      // dismisses — visually lifting the whole page. Reset to the top once
+      // focus leaves the form entirely (not during email→phone hand-off).
+      const formInputs = document.querySelectorAll<HTMLInputElement>('#waitlist-form input');
+      formInputs.forEach((inp) => {
+        inp.addEventListener('blur', () => {
+          setTimeout(() => {
+            if (pageTwo.contains(document.activeElement) && document.activeElement !== pageTwo) return;
+            pageTwo.scrollTop = 0;
+            window.scrollTo(0, 0);
+          }, 120);
+        });
+      });
+
       // Fade out before navigating away (back button or link)
       window.addEventListener('pagehide', function() {
         pageTwo.style.animation = 'none';
