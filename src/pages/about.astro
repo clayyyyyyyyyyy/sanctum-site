@@ -36,8 +36,12 @@ import Base from '../layouts/Base.astro';
         <canvas class="about-hero-canvas" aria-hidden="true"></canvas>
       </h1>
       <form id="waitlist-form" class="waitlist-form" novalidate>
-        <input type="email" name="email" placeholder="email" required autocomplete="email" inputmode="email" data-adapt />
-        <input type="tel" name="phone" placeholder="phone" required autocomplete="tel" inputmode="tel" data-adapt />
+        <label class="pill-field" data-adapt>
+          <input type="email" name="email" placeholder="email" required autocomplete="email" inputmode="email" />
+        </label>
+        <label class="pill-field" data-adapt>
+          <input type="tel" name="phone" placeholder="phone" required autocomplete="tel" inputmode="tel" />
+        </label>
         <button type="submit"><span class="btn-label">join the waitlist</span></button>
         <p id="waitlist-status" class="waitlist-status" role="status" aria-live="polite" data-adapt></p>
       </form>
